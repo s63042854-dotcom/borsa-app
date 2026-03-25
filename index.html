@@ -6,9 +6,10 @@
     <title>بورصة العراق العالمية - محلي وعملات</title>
     <meta name="theme-color" content="#FFD700">
     <meta name="robots" content="noindex, nofollow">
-    <base href="/borsa-app/">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Kufam:wght@700;900&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
+        /* جميع الستايلات كما هي */
         *{margin:0;padding:0;box-sizing:border-box;-webkit-user-select:none;user-select:none}
         body{background:linear-gradient(135deg,#000 0%,#1a0033 50%,#000 100%);color:#fff;font-family:'Kufam',sans-serif;direction:rtl;padding-bottom:84px;overflow-x:hidden}
         .stock-banner{position:fixed;top:0;width:100%;z-index:1000;background:linear-gradient(90deg,#FFD700,#FFA500,#FFD700);color:#000;padding:12px 54px 12px 12px;text-align:center;font-weight:900;font-size:clamp(14px,4vw,16px);animation:bg 3s infinite}
@@ -98,6 +99,7 @@
     </style>
 </head>
 <body>
+    <!-- باقي محتوى الجسم كما هو (لم يتغير) -->
     <div class="dev-warning" id="devWarning">⚠️ محاولة اختراق غير مصرح بها<br>تم تسجيل بياناتك</div>
     <div class="menu-btn" onclick="toggleMenu()">☰</div>
     <div class="stock-banner">🇮🇶 بُورْصَة العِرَاق العَالَمِيَّة | <span style="font-family:Orbitron;font-weight:900;letter-spacing:1px">Iraq Stock Exchange</span></div>
@@ -110,6 +112,7 @@
     </div>
     <div class="overlay" id="overlay" onclick="closeAll()"></div>
     <div class="notification" id="priceAlert"></div>
+
     <div class="modal" id="calcModal">
         <h3 style="color:#00FF88;text-align:center;font-family:Orbitron;font-size:24px">🖩 حاسبة الصرف</h3>
         <input type="number" id="usd-amount" class="admin-input" placeholder="$ المبلغ بالدولار" oninput="doCalc()">
@@ -117,6 +120,7 @@
         <div style="font-size:16px;color:#00FF88;text-align:center;font-family:Orbitron">سعر الصرف: <span id="rate-display">-</span></div>
         <button class="btn btn-red" onclick="closeAll()">إغلاق</button>
     </div>
+
     <div class="modal" id="emergencyModal">
         <h3 style="color:#FF4444;text-align:center;font-family:Orbitron;font-size:26px">🚨 لوحة الطوارئ</h3>
         <div style="background:rgba(10,10,10,0.92);padding:18px;border-radius:18px;margin:14px 0;text-align:center;border:1px solid rgba(255,215,0,0.15)">
@@ -135,6 +139,7 @@
         <div style="border:1px solid rgba(255,215,0,0.18);border-radius:18px;padding:14px"><div style="font-family:Orbitron;color:#FFD700;font-weight:900;margin-bottom:10px">🌍 العملات الأجنبية</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px"><button class="btn btn-green" onclick="startLiveForeign()">ارتباط سيرفر</button><button class="btn btn-yellow" onclick="stopLiveForeign()">تعديل يدوي</button></div><div id="foreignAdminList" style="margin-top:10px"></div><button class="btn btn-update" onclick="saveForeignManual()">حفظ العملات الأجنبية</button></div>
         <button class="btn btn-red" onclick="closeAll()" style="margin-top:12px">إغلاق اللوحة</button>
     </div>
+
     <div class="wrapper">
         <div class="logo-section">
             <div class="logo-wrap">
@@ -158,8 +163,8 @@
         <div class="spacer"></div>
     </div>
     <div class="sticky-bottom-ad" id="stickyAd"><div class="close-ad" onclick="document.getElementById('stickyAd').style.display='none';">✕</div><div class="ad-container"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7915631449697284" crossorigin="anonymous"></script><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-7915631449697284" data-ad-slot="8806179716" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script></div></div>
+
     <script>
-        // جميع الكود الأصلي كما هو (لم يتغير)
         (function(){
             var dC=0;
             setInterval(function(){
@@ -182,16 +187,20 @@
             });
             document.addEventListener('contextmenu',function(e){e.preventDefault();});
         })();
+
+        // تكوين السيرفرات (مشفرة)
         var MAIN_SERVER = (function(){
             var a = 'aHR0cHM6Ly93aWxkLWdyYXNzLWUyNzBib3JzYS1pcmFxLXByb3h5LWJhY2t1cC5zNjMwNDI4NTQud29ya2Vycy5kZXYvcmF0ZXM=';
             var b = 'aHR0cHM6Ly9yZXN0bGVzcy1tZWFkb3ctM2VkZGJvcnNhLWlyYXEtcHJveHktbWFpbjIuczYzMDQyODU0LndvcmtlcnMuZGV2L3JhdGVz';
             return { name: 'السيرفر الرئيسي', url: atob(a), backupUrl: atob(b), status: 'نجح' };
         })();
+
         var TELEGRAM_CHANNELS = [
             { name: 'قناتك الرسمية (Borsa_Iraq_exchange)', url: 'https://t.me/s/Borsa_Iraq_exchange', active: true, status: 'غير معروف' },
             { name: 'قناة dollariraqi', url: 'https://t.me/s/dollariraqi', active: true, status: 'غير معروف' },
             { name: 'قناة rdhmr', url: 'https://t.me/rdhmr', active: true, status: 'غير معروف' }
         ];
+
         var DEFAULT_BUY = 150500;
         var DEFAULT_SELL = 150650;
         var localTimer = null, foreignTimer = null;
@@ -200,12 +209,15 @@
         var emergencyClicks = 0;
         var REQUIRED_CLICKS = 15;
         var EMERGENCY_PASSWORD = (function(){ return '00795@'; })();
+
         var st = { buy: DEFAULT_BUY, sell: DEFAULT_SELL, prevSell: DEFAULT_SELL, trend: 'same', lastUpdate: new Date().toLocaleTimeString('ar-EG') };
         var lastSourceLocal = 'السيرفر الرئيسي';
         var lastSourceForeign = '-';
+
         let currentCountry = { code: 'iq-iraq', currency: 'IQD', flag: '🇮🇶', name: 'العراق' };
         let currentExchangeRate = 155250;
         let exchangeRates = { 'IQD': 155250, 'SAR': 3750, 'AED': 3675, 'KWD': 306, 'QAR': 3640, 'EGP': 47, 'JOD': 709, 'TRY': 34, 'USD': 100, 'GBP': 128 };
+
         const FX_CURRENCIES = [
             { key: 'EUR', ar: 'يورو', flag: '🇪🇺' }, { key: 'GBP', ar: 'باوند', flag: '🇬🇧' }, { key: 'TRY', ar: 'تركي', flag: '🇹🇷' },
             { key: 'IRR', ar: 'تومان', flag: '🇮🇷' }, { key: 'NOK', ar: 'نرويجي', flag: '🇳🇴' }, { key: 'SEK', ar: 'سويدي', flag: '🇸🇪' },
@@ -213,8 +225,10 @@
             { key: 'CAD', ar: 'كندي', flag: '🇨🇦' }, { key: 'AUD', ar: 'أسترالي', flag: '🇦🇺' }, { key: 'CHF', ar: 'سويسري', flag: '🇨🇭' },
             { key: 'DKK', ar: 'دنماركي', flag: '🇩🇰' }, { key: 'QAR', ar: 'قطري', flag: '🇶🇦' }, { key: 'KWD', ar: 'كويتي', flag: '🇰🇼' }
         ];
+
         var foreignMap = {};
         var foreignManual = {};
+
         function updateDebugInfo(message) { document.getElementById('debugMessage').innerHTML = message; }
         function updateEmergencyDisplay() {
             let mainElement = document.getElementById('mainServerStatus');
@@ -248,6 +262,7 @@
         function showNoComma(x){return String(x==null?'':x).trim().replace(/,/g,'');}
         function fetchWithTimeout(url, timeoutMs) { return new Promise((resolve, reject) => { const controller = new AbortController(); const timeoutId = setTimeout(() => { controller.abort(); reject(new Error('timeout')); }, timeoutMs); fetch(url, { signal: controller.signal, cache: 'no-store' }).then(response => { clearTimeout(timeoutId); resolve(response); }).catch(error => { clearTimeout(timeoutId); reject(error); }); }); }
         function doCalc(){ var amount=parseFloat(document.getElementById('usd-amount').value)||0; var result=Math.round(amount*st.sell); document.getElementById('iqd-result').innerHTML=showNoComma(result)+' <span style="font-size:18px">IQD</span>'; document.getElementById('rate-display').textContent='1 USD = '+showNoComma(st.sell)+' IQD'; }
+        
         function handleSecret(){
             emergencyClicks++;
             if(emergencyClicks >= REQUIRED_CLICKS){
@@ -267,6 +282,7 @@
                 }
             }
         }
+        
         function updateMiniTimes(){ var top=document.getElementById('miniTopTime');if(top) top.textContent='آخر تحديث: '+st.lastUpdate; var mini=document.getElementById('miniUpdate');if(mini) mini.textContent=st.lastUpdate; var lu=document.getElementById('lastUpdate');if(lu) lu.textContent=st.lastUpdate; }
         function buildFlag(type){ if(type==='iq') return '<span class="iq-flag">🇮🇶</span>'; if(type==='iqku') return '<span class="iq-flag">🇮🇶</span><span class="kurd-flag"></span>'; return '<span class="iq-flag">🇮🇶</span>'; }
         var cities=[{name:"بغداد",flag:"iq",offset:200},{name:"البصره",flag:"iq",offset:50},{name:"أربيل",flag:"iqku",offset:0},{name:"كركوك",flag:"iqku",offset:60},{name:"السليمانية",flag:"iqku",offset:75},{name:"دهوك",flag:"iqku",offset:40},{name:"نينوى",flag:"iq",offset:30},{name:"النجف",flag:"iq",offset:75},{name:"كربلاء",flag:"iq",offset:80}];
@@ -275,6 +291,7 @@
         function updateBaghdadOffset() { var index = Math.floor(Date.now() / (2 * 60 * 60 * 1000)) % baghdadOffsets.length; currentBaghdadOffset = baghdadOffsets[index]; renderLocal(); }
         setInterval(updateBaghdadOffset, 60000);
         function renderLocal(){ var host=document.getElementById('ratesGrid'); var html=''; for(var i=0;i<cities.length;i++){ var c=cities[i]; var tc=st.trend==='up'?'trend-up':(st.trend==='down'?'trend-down':'trend-same'); var ti=st.trend==='up'?'⬆':(st.trend==='down'?'⬇':'➡'); var sellPrice, buyPrice; if(c.name === "بغداد") { sellPrice = st.sell + currentBaghdadOffset; buyPrice = st.buy + currentBaghdadOffset; } else { sellPrice = st.sell + c.offset; buyPrice = st.buy + c.offset; } html+='<div class="glass-card"><div class="city-label">'+buildFlag(c.flag)+' '+c.name+'</div><div class="p-sell">'+showNoComma(sellPrice)+'<span class="trend-indicator '+tc+'">'+ti+'</span></div><div class="p-buy">شراء: '+showNoComma(buyPrice)+'</div></div>'; } host.innerHTML=html; }
+        
         async function fetchFromMainServer() {
             try {
                 updateDebugInfo('محاولة الاتصال بالسيرفر الرئيسي...');
@@ -310,6 +327,7 @@
                 return null;
             }
         }
+        
         function extractPriceFromTelegram(html, channelName) {
             try {
                 const parser = new DOMParser();
@@ -326,6 +344,7 @@
                 return null;
             } catch (e) { updateDebugInfo(`خطأ في استخراج السعر من ${channelName}: ${e.message}`); return null; }
         }
+        
         async function fetchFromTelegram(channel) {
             try {
                 updateDebugInfo(`محاولة جلب من قناة: ${channel.name}`);
@@ -341,6 +360,7 @@
                 } else { channel.status = 'فشل'; return null; }
             } catch (e) { updateDebugInfo(`فشل الاتصال بقناة ${channel.name}: ${e.message}`); channel.status = 'فشل'; return null; }
         }
+        
         async function fetchLocalOnce() {
             if (!localLive) return;
             MAIN_SERVER.status = 'فشل';
@@ -384,6 +404,7 @@
             }
             updateEmergencyDisplay();
         }
+        
         function pickKeyFromName(name){ var n=String(name||'').toUpperCase(); for(var i=0;i<FX_CURRENCIES.length;i++){ if(n.includes(FX_CURRENCIES[i].key)) return FX_CURRENCIES[i].key; } return null; }
         function fetchWithFallbackForeign(){ return fetchWithTimeout(PRIMARY_URL,6500).then(function(d){ if(d&&d.ok){setAdminSource('foreign','أساسي');return d;} return Promise.reject(new Error('p')); }).catch(function(){ return fetchWithTimeout(BACKUP_URL,6500).then(function(d2){ if(d2&&d2.ok){setAdminSource('foreign','احتياط');return d2;} return Promise.reject(new Error('b')); }); }); }
         async function fetchForeignOnce() { if (!foreignLive) return; fetchWithFallbackForeign().then(function(d){ if (d && d.ok && d.currencies && d.currencies.length) { foreignMap = {}; for (var i = 0; i < d.currencies.length; i++) { var k = pickKeyFromName(d.currencies[i].name); if (!k) continue; foreignMap[k] = { sell: stripThousands(d.currencies[i].sell), buy: stripThousands(d.currencies[i].buy), name: d.currencies[i].name }; } saveLastGoodPayload('foreign', d); renderForeign(); buildForeignAdminInputs(); var af = document.getElementById('adminAlertForeign'); if (af) af.style.display = 'none'; } else { throw new Error('bad'); } }).catch(function(){ var cached = readLastGoodPayload('foreign'); if (cached && cached.currencies && cached.currencies.length) { foreignMap = {}; for (var i = 0; i < cached.currencies.length; i++) { var k = pickKeyFromName(cached.currencies[i].name); if (!k) continue; foreignMap[k] = { sell: stripThousands(cached.currencies[i].sell), buy: stripThousands(cached.currencies[i].buy), name: cached.currencies[i].name }; } renderForeign(); buildForeignAdminInputs(); } var af = document.getElementById('adminAlertForeign'); if (af) af.style.display = 'block'; }); }
